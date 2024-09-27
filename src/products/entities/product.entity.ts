@@ -33,12 +33,18 @@ export class Product {
   stock: number
 
   @Column('text', {
-    'array': true
+    array: true
   })
   sizes: string[]
 
   @Column('text')
   gender: string
+
+  @Column('text', {
+    array: true,
+    default: []
+  })
+  tags: string[]
 
   @BeforeInsert()
   checkSlugInsert() {
@@ -51,6 +57,11 @@ export class Product {
       .replaceAll("'", '')
   }
 
-  // @BeforeUpdate()
-
+  @BeforeUpdate()
+  checkSlugUpdate() {
+    this.slug = this.title
+      .toLowerCase()
+      .replaceAll(' ', '_')
+      .replaceAll("'", '')
+  }
 }
